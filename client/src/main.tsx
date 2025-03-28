@@ -7,8 +7,17 @@ import "./index.css";
  */
 import AppRoutes from "@/routes";
 
+/**
+ * Providers
+ */
+import { AuthProvider } from "@/providers/AuthProvider";
+import { Toaster } from "sonner";
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <AppRoutes />
+    <AuthProvider>
+      <AppRoutes />
+      <Toaster />
+    </AuthProvider>
   </StrictMode>
 );

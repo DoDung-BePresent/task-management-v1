@@ -21,8 +21,9 @@ import {
 import { Input } from "@/components/ui/input";
 import Logo from "@/components/Logo";
 import GoogleOauthButton from "@/components/GoogleOAuthButton";
+import { useAuth } from "@/hooks/useAuth";
 const SignUpPage = () => {
-  const navigate = useNavigate();
+  const { register } = useAuth();
 
   const formSchema = z.object({
     name: z.string().trim().min(1, {
@@ -45,8 +46,8 @@ const SignUpPage = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    register(values);
   };
 
   return (

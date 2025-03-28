@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -21,9 +21,10 @@ import {
 import { Input } from "@/components/ui/input";
 import Logo from "@/components/Logo";
 import GoogleOauthButton from "@/components/GoogleOAuthButton";
+import { useAuth } from "@/hooks/useAuth";
 
 const SignInPage = () => {
-  const navigate = useNavigate();
+  const { login } = useAuth();
 
   const formSchema = z.object({
     email: z.string().trim().email("Invalid email address").min(1, {
@@ -42,8 +43,8 @@ const SignInPage = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    login(values);
   };
 
   return (
