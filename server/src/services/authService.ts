@@ -112,7 +112,7 @@ export const authService = {
         const user = await UserModel.findOne({ email }).session(session);
 
         if (!user) {
-          throw new NotFoundException("User not found");
+          throw new NotFoundException("User not found", "AUTH_USER_NOT_FOUND");
         }
 
         const isValidPassword = await user.comparePassword(password);

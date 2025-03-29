@@ -82,12 +82,6 @@ API.interceptors.response.use(
         return Promise.reject(refreshError);
       }
     }
-
-    // Handle other errors
-    if (error.response?.data?.message) {
-      return Promise.reject(new Error(error.response.data.message));
-    }
-
     return Promise.reject(error);
   }
 );

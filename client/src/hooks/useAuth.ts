@@ -20,6 +20,16 @@ import type { LoginPayload, RegisterPayload } from "@/types/user";
  */
 import { AUTH_MESSAGES } from "@/constants/messages";
 
+/**
+ * Libs
+ */
+import { getErrorMessage } from "@/lib/errors";
+
+/**
+ * Constants
+ */
+import { ErrorCode } from "@/constants/errorCodes";
+
 export const useAuth = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -55,7 +65,16 @@ export const useAuth = () => {
       navigate("/");
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || AUTH_MESSAGES.LOGIN.FAILED);
+      // Extract error code from response
+      const errorCode = error.response?.data?.errorCode as ErrorCode;
+
+      // Get appropriate message based on error code
+      const message = getErrorMessage(
+        errorCode,
+        error.response?.data?.message || AUTH_MESSAGES.LOGIN.FAILED
+      );
+
+      toast.error(message);
     },
   });
 
