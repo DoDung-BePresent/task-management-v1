@@ -22,16 +22,21 @@ import { Input } from "@/components/ui/input";
 import Logo from "@/components/Logo";
 import GoogleOauthButton from "@/components/GoogleOAuthButton";
 import { useAuth } from "@/hooks/useAuth";
+import { AUTH_MESSAGES } from "@/constants/messages";
 
 const SignInPage = () => {
   const { login } = useAuth();
 
   const formSchema = z.object({
-    email: z.string().trim().email("Invalid email address").min(1, {
-      message: "Workspace name is required",
-    }),
+    email: z
+      .string()
+      .trim()
+      .email(AUTH_MESSAGES.VALIDATION.EMAIL_INVALID)
+      .min(1, {
+        message: AUTH_MESSAGES.VALIDATION.EMAIL_REQUIRED,
+      }),
     password: z.string().trim().min(1, {
-      message: "Password is required",
+      message: AUTH_MESSAGES.VALIDATION.PASSWORD_REQUIRED,
     }),
   });
 

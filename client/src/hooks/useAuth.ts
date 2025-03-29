@@ -1,8 +1,24 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
+/**
+ * Node modules
+ */
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+
+/**
+ * Services
+ */
 import { authService } from "@/services/authService";
+
+/**
+ * Types
+ */
 import type { LoginPayload, RegisterPayload } from "@/types/user";
+
+/**
+ * Constants
+ */
+import { AUTH_MESSAGES } from "@/constants/messages";
 
 export const useAuth = () => {
   const queryClient = useQueryClient();
@@ -35,22 +51,24 @@ export const useAuth = () => {
       // Update user in cache
       queryClient.setQueryData(["auth-user"], user);
 
-      toast.success("Logged in successfully");
+      toast.success(AUTH_MESSAGES.LOGIN.SUCCESS);
       navigate("/");
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || "Login failed");
+      toast.error(error.response?.data?.message || AUTH_MESSAGES.LOGIN.FAILED);
     },
   });
 
   const registerMutation = useMutation({
     mutationFn: (data: RegisterPayload) => authService.register(data),
     onSuccess: () => {
-      toast.success("Registration successful. Please login.");
+      toast.success(AUTH_MESSAGES.REGISTER.SUCCESS);
       navigate("/sign-in");
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || "Registration failed");
+      toast.error(
+        error.response?.data?.message || AUTH_MESSAGES.REGISTER.FAILED
+      );
     },
   });
 
@@ -68,7 +86,7 @@ export const useAuth = () => {
       // Clear user from cache
       queryClient.setQueryData(["auth-user"], null);
 
-      toast.success("Logged out successfully");
+      toast.success(AUTH_MESSAGES.LOGOUT.SUCCESS);
       navigate("/sign-in");
     },
   });

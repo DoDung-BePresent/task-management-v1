@@ -8,7 +8,7 @@ export type User = {
   currentWorkspace: string | null;
 };
 
-export type AuthResponse = {
+export type LoginResponse = {
   message: string;
   data?: {
     user: User;
@@ -17,6 +17,10 @@ export type AuthResponse = {
       refreshToken: string;
     };
   };
+};
+
+export type RegisterResponse = {
+  message: string;
 };
 
 export type RegisterPayload = Pick<User, "name" | "email"> & {

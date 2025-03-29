@@ -2,15 +2,30 @@ import axios from "axios";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
-export const instance = axios.create({
+const options = {
   baseURL: BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
-});
+};
+
+const API = axios.create(options);
+
+const APIRefresh = axios.create(options);
+
+APIRefresh.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      window.location.href = "/sign-in";
+    }
+  }
+);
 
 // Request interceptor
-instance.interceptors.request.use(
+API.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
@@ -22,7 +37,7 @@ instance.interceptors.request.use(
 );
 
 // Response interceptor
-instance.interceptors.response.use(
+API.interceptors.response.use(
   (response) => response,
   async (error: any) => {
     const originalRequest = error.config;
@@ -31,9 +46,9 @@ instance.interceptors.response.use(
     if (
       error.response?.status === 401 &&
       originalRequest &&
-      !(originalRequest as any)._retry
+      !originalRequest._retry
     ) {
-      (originalRequest as any)._retry = true;
+      originalRequest._retry = true;
 
       try {
         const refreshToken = localStorage.getItem("refreshToken");
@@ -45,7 +60,7 @@ instance.interceptors.response.use(
         }
 
         // Call refresh token endpoint
-        const response = await instance.post("/auth/refresh-token", {
+        const response = await APIRefresh.post("/auth/refresh-token", {
           refreshToken,
         });
 
@@ -58,7 +73,7 @@ instance.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
 
         // Retry original request
-        return instance(originalRequest);
+        return API(originalRequest);
       } catch (refreshError) {
         // Refresh token failed, clear tokens and redirect to login
         localStorage.removeItem("accessToken");
@@ -77,4 +92,4 @@ instance.interceptors.response.use(
   }
 );
 
-export default instance;
+export default API;
