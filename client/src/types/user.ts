@@ -23,6 +23,11 @@ export type RegisterResponse = {
   message: string;
 };
 
+export type GetCurrentUserResponse = {
+  message: string;
+  data?: User;
+};
+
 export type RegisterPayload = Pick<User, "name" | "email"> & {
   password: string;
 };

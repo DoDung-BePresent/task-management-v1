@@ -2,7 +2,7 @@ import { AudioWaveform } from "lucide-react";
 
 const Logo = () => {
   return (
-    <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
+    <div className="bg-primary text-primary-foreground flex aspect-square size-8 items-center justify-center rounded-md">
       <AudioWaveform className="size-4" />
     </div>
   );

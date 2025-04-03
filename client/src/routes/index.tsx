@@ -12,12 +12,13 @@ import PrivateRoute from "@/routes/PrivateRoute";
 /**
  * Layouts
  */
+import AppLayout from "@/layouts/AppLayout";
 import BaseLayout from "@/layouts/BaseLayout";
 
 /**
  * Pages
  */
-import Home from "@/pages/Home";
+import Dashboard from "@/pages/workspace/Dashboard";
 
 import SignInPage from "@/pages/auth/SignInPage";
 import SignUpPage from "@/pages/auth/SignUpPage";
@@ -35,7 +36,9 @@ const AppRoutes = () => {
           </Route>
         </Route>
         <Route path="/" element={<PrivateRoute />}>
-          <Route index element={<Home />} />
+          <Route element={<AppLayout />}>
+            <Route path="workspace/:workspaceId" element={<Dashboard />} />
+          </Route>
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

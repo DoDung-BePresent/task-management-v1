@@ -39,12 +39,8 @@ export const useAuth = () => {
   const { data: user, isLoading } = useQuery({
     queryKey: ["auth-user"],
     queryFn: async () => {
-      try {
-        const response = await authService.getCurrentUser();
-        return response.data.data;
-      } catch (error) {
-        return null;
-      }
+      const response = await authService.getCurrentUser();
+      return response.data.data;
     },
     enabled: hasToken,
   });
@@ -62,7 +58,6 @@ export const useAuth = () => {
       queryClient.setQueryData(["auth-user"], user);
 
       toast.success(AUTH_MESSAGES.LOGIN.SUCCESS);
-      navigate("/");
     },
     onError: (error: any) => {
       // Extract error code from response
@@ -71,7 +66,7 @@ export const useAuth = () => {
       // Get appropriate message based on error code
       const message = getErrorMessage(
         errorCode,
-        error.response?.data?.message || AUTH_MESSAGES.LOGIN.FAILED
+        error.response?.data?.message || AUTH_MESSAGES.LOGIN.FAILED,
       );
 
       toast.error(message);
@@ -86,7 +81,7 @@ export const useAuth = () => {
     },
     onError: (error: any) => {
       toast.error(
-        error.response?.data?.message || AUTH_MESSAGES.REGISTER.FAILED
+        error.response?.data?.message || AUTH_MESSAGES.REGISTER.FAILED,
       );
     },
   });
@@ -114,8 +109,8 @@ export const useAuth = () => {
     user,
     isLoading,
     isAuthenticated: !!user,
-    login: loginMutation.mutate,
-    register: registerMutation.mutate,
-    logout: logoutMutation.mutate,
+    login: loginMutation,
+    register: registerMutation,
+    logout: logoutMutation,
   };
 };

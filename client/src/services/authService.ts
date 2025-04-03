@@ -4,6 +4,7 @@ import type {
   LoginPayload,
   RegisterPayload,
   RegisterResponse,
+  GetCurrentUserResponse,
 } from "@/types/user";
 
 export const authService = {
@@ -24,6 +25,6 @@ export const authService = {
   },
 
   async getCurrentUser() {
-    return API.get("/user/current-user");
+    return API.get<GetCurrentUserResponse>("/user/current-user");
   },
 };

@@ -1,5 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { NuqsAdapter } from "nuqs/adapters/react";
 import "./index.css";
 
 /**
@@ -10,14 +11,20 @@ import AppRoutes from "@/routes";
 /**
  * Providers
  */
-import { AuthProvider } from "@/providers/AuthProvider";
+import { QueryProvider } from "@/providers/QueryProvider";
+
+/**
+ * Components
+ */
 import { Toaster } from "sonner";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <AuthProvider>
-      <AppRoutes />
+    <QueryProvider>
+      <NuqsAdapter>
+        <AppRoutes />
+      </NuqsAdapter>
       <Toaster />
-    </AuthProvider>
-  </StrictMode>
+    </QueryProvider>
+  </StrictMode>,
 );
